@@ -9,6 +9,68 @@ function init() {
   loadComponent('footer-placeholder', 'components/footer.html', initFooter);
   initContactForm();
   initCounters();
+  initScrollMotion();
+  initScrollProgress();
+  initHeroParallax();
+}
+
+function initScrollMotion() {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced || !('IntersectionObserver' in window)) return;
+
+  document.body.classList.add('js-motion');
+
+  const items = document.querySelectorAll('.scroll-in');
+  if (!items.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+  );
+
+  items.forEach((item) => observer.observe(item));
+
+  // Vangnet: forceer zichtbaarheid als de observer om wat voor reden dan ook iets mist.
+  setTimeout(() => {
+    document.querySelectorAll('.scroll-in:not(.in-view)').forEach((item) => item.classList.add('in-view'));
+  }, 4000);
+}
+
+function initScrollProgress() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const bar = document.createElement('div');
+  bar.className = 'scroll-progress';
+  document.body.appendChild(bar);
+
+  const onScroll = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    bar.style.width = progress + '%';
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+function initHeroParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const img = document.querySelector('.hero-photo-card img');
+  if (!img) return;
+
+  const onScroll = () => {
+    const rect = img.parentElement.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    const offset = rect.top * 0.08;
+    img.style.transform = `translateY(${offset}px) scale(1.08)`;
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 function loadComponent(id, url, callback) {
@@ -28,6 +90,14 @@ function initHeader() {
   const mobileMenu = document.querySelector('.mobile-menu');
   const menuLinks = document.querySelectorAll('.mobile-menu a');
 
+  function collapseMobileAccordions() {
+    document.querySelectorAll('.mobile-nav-trigger[aria-expanded="true"]').forEach((btn) => {
+      btn.setAttribute('aria-expanded', 'false');
+      const sub = document.getElementById(btn.getAttribute('aria-controls'));
+      if (sub) sub.classList.remove('open');
+    });
+  }
+
   function openMenu() {
     mobileMenu.classList.add('open');
     document.body.classList.add('menu-open');
@@ -40,6 +110,7 @@ function initHeader() {
     document.body.classList.remove('menu-open');
     document.body.style.overflow = '';
     toggle.setAttribute('aria-expanded', 'false');
+    collapseMobileAccordions();
   }
 
   if (toggle && mobileMenu) {
@@ -53,6 +124,24 @@ function initHeader() {
   });
 
   menuLinks.forEach((link) => link.addEventListener('click', closeMenu));
+
+  document.querySelectorAll('.mobile-nav-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      const sub = document.getElementById(btn.getAttribute('aria-controls'));
+      if (sub) sub.classList.toggle('open', !expanded);
+    });
+  });
+
+  document.querySelectorAll('.has-dropdown').forEach((item) => {
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const trigger = item.querySelector('.nav-dropdown-trigger');
+        if (trigger) trigger.focus();
+      }
+    });
+  });
 
   const current = document.body.getAttribute('data-page');
   if (current) {

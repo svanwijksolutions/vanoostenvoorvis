@@ -90,14 +90,6 @@ function initHeader() {
   const mobileMenu = document.querySelector('.mobile-menu');
   const menuLinks = document.querySelectorAll('.mobile-menu a');
 
-  function collapseMobileAccordions() {
-    document.querySelectorAll('.mobile-nav-trigger[aria-expanded="true"]').forEach((btn) => {
-      btn.setAttribute('aria-expanded', 'false');
-      const sub = document.getElementById(btn.getAttribute('aria-controls'));
-      if (sub) sub.classList.remove('open');
-    });
-  }
-
   function openMenu() {
     mobileMenu.classList.add('open');
     document.body.classList.add('menu-open');
@@ -110,7 +102,6 @@ function initHeader() {
     document.body.classList.remove('menu-open');
     document.body.style.overflow = '';
     toggle.setAttribute('aria-expanded', 'false');
-    collapseMobileAccordions();
   }
 
   if (toggle && mobileMenu) {
@@ -124,24 +115,6 @@ function initHeader() {
   });
 
   menuLinks.forEach((link) => link.addEventListener('click', closeMenu));
-
-  document.querySelectorAll('.mobile-nav-trigger').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!expanded));
-      const sub = document.getElementById(btn.getAttribute('aria-controls'));
-      if (sub) sub.classList.toggle('open', !expanded);
-    });
-  });
-
-  document.querySelectorAll('.has-dropdown').forEach((item) => {
-    item.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const trigger = item.querySelector('.nav-dropdown-trigger');
-        if (trigger) trigger.focus();
-      }
-    });
-  });
 
   const current = document.body.getAttribute('data-page');
   if (current) {

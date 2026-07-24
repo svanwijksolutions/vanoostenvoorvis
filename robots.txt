@@ -1,0 +1,6 @@
+# Dit is een concept-website: een ongevraagd ontwerpvoorstel van Drivenn Agency,
+# nog geen live/goedgekeurde website van Van Oosten voor Vis.
+# Bewust volledig uitgesloten van indexering zolang dat zo is.
+
+User-agent: *
+Disallow: /

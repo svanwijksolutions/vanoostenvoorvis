@@ -11,44 +11,6 @@ function init() {
   initCounters();
 }
 
-function initFab() {
-  const fab = document.querySelector('.rfab');
-  if (!fab) return;
-  const main = fab.querySelector('.rfab-main');
-  const items = fab.querySelectorAll('.rfab-item');
-
-  function setOpen(open) {
-    fab.classList.toggle('rfab--open', open);
-    main.setAttribute('aria-expanded', String(open));
-    items.forEach((item) => item.setAttribute('tabindex', open ? '0' : '-1'));
-  }
-
-  main.addEventListener('click', (e) => {
-    e.stopPropagation();
-    setOpen(!fab.classList.contains('rfab--open'));
-  });
-
-  items.forEach((item) => {
-    item.addEventListener('click', () => {
-      const link = item.getAttribute('data-rfab-link');
-      if (!link) return;
-      if (item.getAttribute('data-rfab-blank') === 'true') {
-        window.open(link, '_blank', 'noopener');
-      } else {
-        window.location.href = link;
-      }
-      setOpen(false);
-    });
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!fab.contains(e.target)) setOpen(false);
-  });
-  fab.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setOpen(false);
-  });
-}
-
 function loadComponent(id, url, callback) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -110,7 +72,6 @@ function initHeader() {
 function initFooter() {
   const yearEl = document.querySelector('[data-year]');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
-  initFab();
 }
 
 function initCounters() {

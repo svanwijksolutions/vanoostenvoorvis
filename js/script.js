@@ -12,6 +12,31 @@ function init() {
   initScrollMotion();
   initScrollProgress();
   initHeroParallax();
+  initCookieNotice();
+}
+
+function initCookieNotice() {
+  try {
+    if (localStorage.getItem('cookieConsent') === 'true') return;
+  } catch (err) {
+    return;
+  }
+  const banner = document.createElement('div');
+  banner.className = 'cookie-notice';
+  banner.setAttribute('role', 'dialog');
+  banner.setAttribute('aria-label', 'Cookiemelding');
+  banner.innerHTML =
+    '<p>Deze website gebruikt alleen functionele cookies, nodig om de site goed te laten werken. Meer weten? Lees onze <a href="privacy.html">privacyverklaring</a>.</p>' +
+    '<button type="button" class="btn btn-primary cookie-accept">Accepteren</button>';
+  document.body.appendChild(banner);
+  banner.querySelector('.cookie-accept').addEventListener('click', () => {
+    try {
+      localStorage.setItem('cookieConsent', 'true');
+    } catch (err) {
+      // localStorage niet beschikbaar, banner sluit toch
+    }
+    banner.remove();
+  });
 }
 
 function initScrollMotion() {
@@ -165,6 +190,10 @@ function initContactForm() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    // Honeypot: onzichtbaar voor mensen, alleen bots vullen dit in. Stil negeren.
+    if (form.website && form.website.value.trim() !== '') return;
+
     const naam = form.naam.value.trim();
     const email = form.email.value.trim();
     const ophaaldatum = form.ophaaldatum ? form.ophaaldatum.value.trim() : '';

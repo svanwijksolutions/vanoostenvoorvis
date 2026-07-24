@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact | Van Oosten voor Vis</title>
-<meta name="description" content="Bezoek Van Oosten voor Vis aan de Buitenwatersloot 43 in Delft, of bestel vooraf. Adres, telefoon, openingstijden en bestelformulier.">
+<meta name="description" content="Bezoek Van Oosten voor Vis aan de Buitenwatersloot 43 in Delft, of bestel vooraf. Adres, telefoon, openingstijden en bestelformulier voor uw bestelling.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://svanwijksolutions.github.io/vanoostenvoorvis/contact.html">
 <link rel="icon" type="image/webp" href="assets/images/logo-vanoosten.webp">
@@ -54,6 +54,16 @@
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://svanwijksolutions.github.io/vanoostenvoorvis/" },
+    { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://svanwijksolutions.github.io/vanoostenvoorvis/contact.html" }
+  ]
+}
+</script>
 </head>
 <body data-page="contact">
 <div id="header-placeholder"></div>
@@ -86,7 +96,11 @@
           <label for="bericht">Uw bestelling of bericht</label>
           <textarea id="bericht" name="bericht" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Versturen</button>
+        <div class="form-honeypot" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn-primary">Bestelling versturen</button>
         <p class="form-note">Uw e-mailprogramma opent met een vooraf ingevuld bericht aan info@vanoostenvoorvis.nl. Bestel bij voorkeur twee dagen van tevoren.</p>
         <p class="form-status" id="form-status"></p>
       </form>

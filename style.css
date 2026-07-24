@@ -460,6 +460,21 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 .form-note { font-size: 0.82rem; color: var(--color-text-soft); margin-top: 10px; }
 .form-status { font-size: 0.88rem; margin-top: 14px; display: none; }
 .form-status.visible { display: block; }
+/* Honeypot: onzichtbaar voor mensen, wel aanwezig voor bots */
+.form-honeypot { position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Cookiemelding */
+.cookie-notice {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 300;
+  background: var(--color-navy-deep); color: rgba(238, 246, 248, 0.92);
+  padding: 18px 24px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+}
+.cookie-notice p { margin: 0; font-size: 0.86rem; max-width: 620px; }
+.cookie-notice a { text-decoration: underline; color: var(--color-white); }
+.cookie-notice .btn { flex-shrink: 0; padding: 10px 26px; }
+@media (max-width: 560px) { .cookie-notice { flex-direction: column; text-align: center; } }
 
 .info-card { background: var(--color-ice); border-radius: var(--radius-lg); padding: 40px; }
 .info-list { display: grid; gap: 22px; margin-bottom: 28px; }

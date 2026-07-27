@@ -481,27 +481,6 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 @media (min-width: 768px) { .heritage-badge { width: 210px; height: 210px; } }
 @media (min-width: 1200px) { .heritage-badge { width: 230px; height: 230px; } }
 
-/* Extra decoratief accent bij de stempel-badge (feedback Sem: "een beker
-   erbij ofzo, iets dat bij familietraditie past"): een kleine wisselbeker
-   boven op de linkerbovenhoek van de stempel. Eigen aria-hidden zodat de
-   accessible name van de badge (role="img") niet vervuild raakt. */
-.heritage-trophy {
-  position: absolute;
-  top: -12px; left: -12px;
-  width: 42px; height: 42px;
-  background: var(--color-white);
-  border: 2px solid var(--color-amber);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 16px rgba(9, 39, 50, 0.3);
-  z-index: 4;
-}
-.heritage-trophy svg { width: 22px; height: 22px; color: var(--color-cyan-deep); }
-@media (min-width: 768px) {
-  .heritage-trophy { width: 56px; height: 56px; top: -16px; left: -16px; }
-  .heritage-trophy svg { width: 30px; height: 30px; }
-}
-
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; } }
 
 /* USP strip — editorial index list, not a repeated icon-card grid */

@@ -181,9 +181,27 @@ p { margin: 0 0 1em; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
 }
 .mobile-menu.open { transform: translateX(0); visibility: visible; opacity: 1; }
-.mobile-menu a { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; padding: 12px 0; color: var(--color-navy); }
-.mobile-menu a:hover { color: var(--color-cyan-deep); }
-.mobile-menu .btn { margin-top: 20px; }
+/* :not(.btn) hier is bewust structureel: zonder deze uitsluiting overschrijft
+   deze regel (specificiteit .mobile-menu + element a) de opmaak van .btn
+   (specificiteit van alleen de klasse), waardoor "Bel de winkel" hieronder
+   zijn horizontale padding en witte tekstkleur verloor en de tekst tegen de
+   rand van de knop aan kwam te staan (feedback Sem, getest op telefoon: geen
+   ruimte tussen tekst en knoprand). Met :not(.btn) blijven gewone menulinks
+   ongewijzigd en blijft de knop altijd zijn eigen .btn/.btn-primary-opmaak
+   houden, ook bij toekomstige tekstwijzigingen. */
+.mobile-menu a:not(.btn) { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; padding: 12px 0; color: var(--color-navy); }
+.mobile-menu a:not(.btn):hover { color: var(--color-cyan-deep); }
+/* De "Bel de winkel"-knop in het volledige-scherm mobiele menu is de enige
+   call-to-action daar, dus bewust iets groter dan de standaard .btn-maat en
+   met expliciet witte tekst (contrast met de cyaan achtergrond was met de
+   eerdere navy-tekst circa 2,5:1, ruim onder de AA-minimumnorm). */
+.mobile-menu .btn {
+  margin-top: 20px;
+  padding: 19px 40px;
+  font-size: 1rem;
+  color: var(--color-white);
+}
+.mobile-menu .btn:hover { color: var(--color-white); }
 body.menu-open { overflow: hidden; }
 body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
@@ -307,7 +325,7 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
    de vaste buitenfoto blijft staan zonder wisselen). */
 .hero {
   position: relative;
-  padding: 160px 0 100px;
+  padding: 128px 0 64px;
   overflow: hidden;
   background-color: var(--color-navy-deep);
 }
@@ -315,21 +333,25 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 @media (min-width: 1200px) { .hero { padding: 224px 0 172px; } }
 
 /* Onder de 900px-grid-breakpoint staat de hero-copy bóven de hero-visual
-   gestapeld, waardoor de sectie erg hoog wordt (tot bijna 3x zo hoog als
-   breed). Met een gewone volle-hoogte background-size:cover zou de foto dan
-   extreem moeten uitrekken om die hoogte te vullen, met een sterk uitvergroot
-   fragment als resultaat (precies het "te ingezoomd/afgesneden"-feedbackpunt
-   van Sem). Daarom krijgt de fotolaag onder 900px een beperkte hoogte (relatief
-   aan de breedte, dicht bij de eigen verhouding van de bronfoto's) en een
-   zachte fade-out onderin, zodat de rest van de hoge sectie op de effen
-   donkere ondergrond overloopt i.p.v. een sterk uitgerekte foto te tonen. */
+   gestapeld. Feedbackronde Sem 27-07-2026 (getest op telefoon): de eerste
+   fix hiervoor beperkte de fotolaag tot slechts 72vw hoogte, wat op een
+   getest toestel (390px breed) een foto-band van amper 281px opleverde
+   tegenover een sectie van ruim 1029px, dus meer dan 70% van de hero was
+   vlakke navy zonder foto ("foto's niet goed zichtbaar"). Nu twee dingen
+   tegelijk aangepakt: (1) de sectie zelf compacter gemaakt (minder padding,
+   kleinere gap, kleiner hero-visual-minimum) zodat er minder lege hoogte is
+   om te vullen, en (2) de fotolaag krijgt een hogere cap (120vw i.p.v. 72vw)
+   zodat 'm een duidelijk groter deel van de kortere sectie beslaat, zonder
+   terug te vallen in de eerder gemelde sterke uitvergroting. Blijft gecapt
+   i.p.v. volledig height:100%, anders wordt de crop op een smalle, hoge
+   sectie alsnog te sterk ingezoomd. */
 .hero-bg {
   position: absolute;
   top: 0; left: 0; right: 0;
   z-index: 0;
-  height: min(100%, 72vw);
-  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  height: min(100%, 120vw);
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
 }
 @media (min-width: 900px) {
   .hero-bg { height: 100%; -webkit-mask-image: none; mask-image: none; }
@@ -389,7 +411,8 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 }
 @media (prefers-reduced-motion: reduce) { .hero-overlay { animation: none; } }
 
-.hero-grid { position: relative; z-index: 2; display: grid; gap: 52px; align-items: center; }
+.hero-grid { position: relative; z-index: 2; display: grid; gap: 32px; align-items: center; }
+@media (min-width: 900px) { .hero-grid { gap: 52px; } }
 .hero-copy { position: relative; z-index: 2; }
 .hero-copy .eyebrow { color: var(--color-cyan); text-shadow: 0 2px 14px rgba(9, 27, 35, 0.5); }
 .hero-copy h1 { color: var(--color-white); text-shadow: 0 2px 20px rgba(9, 27, 35, 0.45); }
@@ -410,7 +433,7 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 280px;
+  min-height: 190px;
 }
 @media (min-width: 768px) { .hero-visual { min-height: 360px; } }
 @media (min-width: 1200px) { .hero-visual { min-height: 420px; } }

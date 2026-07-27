@@ -10,7 +10,6 @@ function init() {
   initContactForm();
   initCounters();
   initScrollMotion();
-  initScrollProgress();
   initHeroParallax();
   initCookieNotice();
 }
@@ -66,21 +65,6 @@ function initScrollMotion() {
   setTimeout(() => {
     document.querySelectorAll('.scroll-in:not(.in-view)').forEach((item) => item.classList.add('in-view'));
   }, 4000);
-}
-
-function initScrollProgress() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const bar = document.createElement('div');
-  bar.className = 'scroll-progress';
-  document.body.appendChild(bar);
-
-  const onScroll = () => {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
-    bar.style.width = progress + '%';
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 function initHeroParallax() {

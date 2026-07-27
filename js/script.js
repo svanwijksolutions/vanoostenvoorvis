@@ -9,9 +9,25 @@ function init() {
   loadComponent('footer-placeholder', 'components/footer.html', initFooter);
   initContactForm();
   initCounters();
+  initIconDraw();
   initScrollMotion();
   initHeroParallax();
   initCookieNotice();
+}
+
+// Zelftekenende iconen die direct bij laden tekenen (.icon-draw, geen scroll-trigger).
+// Zelfde fix als de .icon-draw-slow-iconen: Chromium past stroke-dasharray/
+// stroke-dashoffset niet toe op inhoud die via <use href="sprite.svg#icon-x">
+// verwezen wordt (het is geen "echt" kind-element in de lichte DOM), waardoor de
+// animatie eerder onzichtbaar bleef. Losgetrokken: de paden staan nu inline in de
+// HTML (geen <use> meer) en de werkelijke padlengte wordt hier per icoon opgehaald.
+function initIconDraw() {
+  document.querySelectorAll('.icon-draw path, .icon-draw circle, .icon-draw rect').forEach((el) => {
+    if (typeof el.getTotalLength !== 'function') return;
+    const length = el.getTotalLength();
+    el.style.strokeDasharray = String(length);
+    el.style.strokeDashoffset = String(length);
+  });
 }
 
 function initCookieNotice() {
@@ -152,6 +168,79 @@ function initHeader() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
+
+  initNavDropdown();
+  initMobileAccordion();
+}
+
+// Desktop "Aanbod"-dropdown: opent bij hover/focus, sluit bij het verlaten van
+// het menu of bij Escape, volledig toetsenbord-navigeerbaar (RULES.md
+// "Navigatie"). Een korte sluit-vertraging voorkomt dat de kleine ruimte
+// tussen link en menu de hover per ongeluk breekt.
+function initNavDropdown() {
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (!dropdown) return;
+  const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+  const menu = dropdown.querySelector('.nav-dropdown-menu');
+  if (!toggle || !menu) return;
+
+  let closeTimer = null;
+
+  function open() {
+    clearTimeout(closeTimer);
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function scheduleClose() {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(close, 200);
+  }
+
+  dropdown.addEventListener('mouseenter', open);
+  dropdown.addEventListener('mouseleave', scheduleClose);
+  dropdown.addEventListener('focusin', open);
+  dropdown.addEventListener('focusout', (e) => {
+    if (!dropdown.contains(e.relatedTarget)) close();
+  });
+  dropdown.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+      close();
+      toggle.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target)) close();
+  });
+}
+
+// Mobiel: "Aanbod" klapt accordion-stijl uit binnen het mobiele menu, geen
+// apart flyout-patroon (RULES.md "Navigatie"). Gecollapste links krijgen
+// tabindex -1 zodat toetsenbordgebruikers niet door onzichtbare links tabben.
+function initMobileAccordion() {
+  const item = document.querySelector('.mobile-nav-item');
+  if (!item) return;
+  const toggle = item.querySelector('.mobile-accordion-toggle');
+  const list = item.querySelector('.mobile-accordion-list');
+  if (!toggle || !list) return;
+  const links = list.querySelectorAll('a');
+
+  function setOpen(isOpen) {
+    item.classList.toggle('accordion-open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    links.forEach((link) => {
+      if (isOpen) link.removeAttribute('tabindex');
+      else link.setAttribute('tabindex', '-1');
+    });
+  }
+
+  setOpen(false);
+  toggle.addEventListener('click', () => {
+    setOpen(!item.classList.contains('accordion-open'));
+  });
 }
 
 function initFooter() {

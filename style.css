@@ -193,31 +193,142 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
   .menu-toggle { display: none; }
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Aanbod-dropdown (hoofdnavigatie) — desktop: hover/focus, sluit bij verlaten
+   of Escape, volledig toetsenbord-navigeerbaar (RULES.md "Navigatie").
+   ========================================================================== */
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 5px; }
+.nav-dropdown-caret { width: 10px; height: 10px; flex-shrink: 0; transition: transform var(--transition); }
+.nav-dropdown.open .nav-dropdown-caret { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  width: 320px;
+  margin: 0;
+  padding: 10px;
+  display: grid;
+  gap: 2px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(14, 58, 76, 0.08);
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+  z-index: 120;
+}
+.nav-dropdown.open .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.nav-dropdown-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 13px 16px;
+  box-sizing: border-box;
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+.nav-dropdown-menu a::after { content: none; }
+.nav-dropdown-menu a:hover, .nav-dropdown-menu a:focus-visible { background: var(--color-ice); color: var(--color-cyan-deep); outline: none; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-dropdown-menu, .nav-dropdown-caret { transition: none; }
+}
+
+/* Mobiel: accordion-stijl uitklappen onder "Aanbod", geen apart flyout-patroon
+   (RULES.md "Navigatie": op mobiel maar één interactiepatroon). */
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 300px; }
+.mobile-nav-row { display: flex; align-items: center; justify-content: center; gap: 4px; }
+.mobile-accordion-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  background: none; border: none; color: var(--color-navy);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.mobile-accordion-toggle:hover, .mobile-accordion-toggle:focus-visible { background: var(--color-ice); }
+.mobile-accordion-caret { width: 16px; height: 16px; transition: transform var(--transition); }
+.mobile-nav-item.accordion-open .mobile-accordion-caret { transform: rotate(180deg); }
+.mobile-accordion-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  transition: grid-template-rows 0.35s ease;
+}
+.mobile-accordion-wrap > .mobile-accordion-list { overflow: hidden; min-height: 0; }
+.mobile-nav-item.accordion-open .mobile-accordion-wrap { grid-template-rows: 1fr; }
+.mobile-accordion-list { margin: 0; padding: 0; text-align: center; }
+.mobile-accordion-list a {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 9px 0;
+  color: var(--color-text-soft);
+}
+.mobile-accordion-list a:hover { color: var(--color-cyan-deep); }
+@media (prefers-reduced-motion: reduce) {
+  .mobile-accordion-wrap, .mobile-accordion-caret { transition: none; }
+}
+@media (min-width: 900px) {
+  /* Dropdown/accordion-markup bestaat alleen zichtbaar in de context waar hij hoort */
+  .mobile-nav-item { display: none; }
+}
+@media (max-width: 899px) {
+  .nav-dropdown-menu { display: none; }
+}
+
 /* ==========================================================================
    Hero
    ========================================================================== */
 @keyframes aurora-drift {
-  0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
-  50% { background-position: 10% 10%, 90% 15%, 45% 90%; }
+  0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%, center, center; }
+  50% { background-position: 10% 10%, 90% 15%, 45% 90%, center, center; }
 }
+/* Achtergrondfoto-hero (RULES.md "Achtergrondfoto-hero"): buitenaanzicht van de
+   winkel, over de volle breedte van de bovenste sectie, verdonkerd met een
+   overlay zodat de tekst er goed leesbaar overheen staat. De bestaande
+   kleuraccenten (aurora-blobs) blijven als bovenste laag, iets subtieler, voor
+   dezelfde beweging als voorheen. */
 .hero {
   position: relative;
   padding: 160px 0 100px;
   overflow: hidden;
   background-image:
-    radial-gradient(circle at 10% 15%, rgba(31, 182, 214, 0.18), transparent 55%),
-    radial-gradient(circle at 90% 10%, rgba(14, 58, 76, 0.12), transparent 50%),
-    radial-gradient(circle at 50% 100%, rgba(232, 163, 61, 0.1), transparent 60%);
-  background-size: 140% 140%;
+    radial-gradient(circle at 10% 15%, rgba(31, 182, 214, 0.22), transparent 55%),
+    radial-gradient(circle at 90% 10%, rgba(14, 58, 76, 0.18), transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(232, 163, 61, 0.12), transparent 60%),
+    linear-gradient(100deg, rgba(9, 27, 35, 0.82) 0%, rgba(9, 27, 35, 0.62) 42%, rgba(9, 39, 50, 0.52) 100%),
+    url('assets/images/van-oosten-voor-vis-buitenaanzicht-fotohomepage.webp');
+  background-repeat: no-repeat;
+  background-position: 0% 0%, 100% 0%, 50% 100%, center, center;
+  background-size: 140% 140%, 140% 140%, 140% 140%, cover, cover;
   animation: aurora-drift 20s ease-in-out infinite;
-  background-color: var(--color-bg);
+  background-color: var(--color-navy-deep);
 }
 @media (prefers-reduced-motion: reduce) { .hero { animation: none; } }
 .hero-grid { display: grid; gap: 52px; align-items: center; }
 .hero-copy { position: relative; z-index: 2; }
-.hero-lede { font-size: 1.15rem; color: var(--color-text-soft); max-width: 480px; margin-bottom: 2em; }
+.hero-copy .eyebrow { color: var(--color-cyan); text-shadow: 0 2px 14px rgba(9, 27, 35, 0.5); }
+.hero-copy h1 { color: var(--color-white); text-shadow: 0 2px 20px rgba(9, 27, 35, 0.45); }
+.hero-lede { font-size: 1.15rem; color: rgba(238, 246, 248, 0.9); max-width: 480px; margin-bottom: 2em; text-shadow: 0 2px 14px rgba(9, 27, 35, 0.4); }
+.hero-copy .btn-outline { border-color: rgba(255, 255, 255, 0.6); color: var(--color-white); }
+.hero-copy .btn-outline:hover { background: rgba(255, 255, 255, 0.14); color: var(--color-white); }
 .gradient-text {
-  background: linear-gradient(100deg, var(--color-cyan-deep), var(--color-cyan), var(--color-cyan-deep));
+  background: linear-gradient(100deg, var(--color-cyan), #7fe0f2, var(--color-cyan));
   background-size: 200% auto;
   -webkit-background-clip: text; background-clip: text; color: transparent;
   animation: gradient-shift 7s ease infinite;
@@ -457,36 +568,99 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 .page-hero .lede { margin: 0 auto; }
 
 /* ==========================================================================
-   Aanbod page
+   Aanbod-overzicht (aanbod.html) — acht categorieën van gelijk gewicht,
+   dus symmetrisch en gelijk uitgelijnd (RULES.md "Grid- en kaartlayouts"),
+   met een echte foto per categorie i.p.v. een lijnicoon.
    ========================================================================== */
-.category-grid { display: grid; gap: 24px; grid-template-columns: 1fr; margin-top: 52px; counter-reset: category; }
-.category-card {
-  counter-increment: category;
-  position: relative;
+.category-overview-grid { display: grid; gap: 24px; grid-template-columns: 1fr; margin-top: 52px; }
+@media (min-width: 640px) { .category-overview-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .category-overview-grid { grid-template-columns: repeat(4, 1fr); } }
+.category-overview-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-white); border-radius: var(--radius-md); padding: 30px; box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
-.category-card::before {
-  content: counter(category, decimal-leading-zero);
-  position: absolute;
-  top: 18px;
-  left: 24px;
-  font-family: var(--font-display);
-  font-size: 3.1rem;
-  font-weight: 700;
-  color: var(--color-ice);
-  line-height: 1;
-  z-index: 0;
-  pointer-events: none;
+.category-overview-card:hover, .category-overview-card:focus-visible { transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+.category-overview-card:focus-visible { outline: 2px solid var(--color-cyan-deep); outline-offset: 2px; }
+.category-overview-photo { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--color-ice); }
+.category-overview-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.5s ease; }
+.category-overview-card:hover .category-overview-photo img { transform: scale(1.06); }
+.category-overview-body { display: flex; flex-direction: column; flex-grow: 1; padding: 20px 22px 24px; }
+.category-overview-body h2 { font-size: 1.12rem; margin-bottom: 0.4em; }
+.category-overview-body p { color: var(--color-text-soft); font-size: 0.9rem; margin-bottom: 0; flex-grow: 1; }
+.category-overview-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 0.84rem; font-weight: 700; color: var(--color-cyan-deep); }
+.category-overview-card:hover .category-overview-link, .category-overview-card:focus-visible .category-overview-link { color: var(--color-navy); }
+
+/* ==========================================================================
+   Aanbod-categoriepagina's (aanbod-*.html)
+   ========================================================================== */
+.category-intro { max-width: 720px; margin: 0 auto; text-align: center; }
+.category-intro p { color: var(--color-text-soft); font-size: 1.03rem; }
+.category-intro a { color: var(--color-cyan-deep); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.category-intro a:hover { color: var(--color-navy); }
+
+.product-heading { text-align: center; margin-bottom: 40px; }
+.product-heading-secondary { margin-top: 64px; }
+
+/* Productkaarten: symmetrisch, gelijke breedte/hoogte per rij, vaste
+   aspect-ratio-fotocontainer met object-fit: cover (RULES.md "Grid- en
+   kaartlayouts" + "Beeldmateriaal"), nooit vervormde/uitgerekte foto's. */
+.product-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
-.category-card > * { position: relative; z-index: 1; }
-.category-card h3 { display: flex; align-items: center; gap: 12px; }
-.category-card .offer-icon { margin-bottom: 12px; }
-.category-card ul { margin-top: 1em; display: grid; gap: 8px; }
-.category-card ul li { display: flex; gap: 10px; color: var(--color-text-soft); font-size: 0.93rem; align-items: flex-start; }
-.category-card ul li svg { width: 15px; height: 15px; color: var(--color-amber); flex-shrink: 0; margin-top: 4px; }
-@media (min-width: 700px) { .category-grid { grid-template-columns: repeat(2, 1fr); } }
-.price-note { background: var(--color-ice); border-radius: var(--radius-md); padding: 28px 32px; margin-top: 40px; text-align: center; color: var(--color-text-soft); font-size: 0.95rem; }
+.product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-soft); }
+.product-photo { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--color-ice); }
+.product-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.product-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: var(--color-amber); color: var(--color-navy-deep);
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 6px 12px; border-radius: 999px;
+}
+.product-body { display: flex; flex-direction: column; flex-grow: 1; padding: 20px 22px 24px; }
+.product-body h3 { font-size: 1.06rem; margin-bottom: 0.4em; }
+.product-body p { color: var(--color-text-soft); font-size: 0.9rem; margin-bottom: 0.8em; }
+.product-body p:last-of-type { margin-bottom: 0; }
+.product-status { color: var(--color-amber) !important; font-weight: 600; font-size: 0.84rem !important; }
+.product-price { font-family: var(--font-display); font-weight: 700; color: var(--color-cyan-deep); font-size: 1.02rem; margin-top: auto; padding-top: 10px; }
+.product-note { text-align: center; color: var(--color-text-soft); font-size: 0.9rem; margin-top: 40px; }
+
+/* Vorige/volgende categorie + terug naar overzicht */
+.category-pager {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: stretch;
+  padding: 28px 0;
+  border-top: 1px solid rgba(14, 58, 76, 0.12);
+  border-bottom: 1px solid rgba(14, 58, 76, 0.12);
+}
+.category-pager-link { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 0; box-sizing: border-box; color: var(--color-navy); font-weight: 600; font-size: 0.94rem; }
+.category-pager-link svg { flex-shrink: 0; color: var(--color-cyan-deep); }
+.category-pager-link:hover { color: var(--color-cyan-deep); }
+.category-pager-next { justify-content: flex-end; text-align: right; }
+.category-pager-label { display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-soft); font-weight: 700; margin-bottom: 2px; }
+.category-pager-all { display: inline-flex; align-items: center; min-height: 44px; text-align: center; font-size: 0.82rem; font-weight: 700; color: var(--color-cyan-deep); order: 3; }
+.category-pager-all:hover { color: var(--color-navy); }
+@media (min-width: 700px) {
+  .category-pager { flex-direction: row; align-items: center; justify-content: space-between; }
+  .category-pager-all { order: 0; }
+}
 
 /* ==========================================================================
    Contact page
@@ -592,5 +766,6 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
   .section { padding: 60px 0; }
   .cta-strip { padding: 46px 22px; margin: 0 16px; }
   .contact-form, .info-card { padding: 26px; }
-  .category-card { padding: 24px; }
+  .product-body, .category-overview-body { padding: 18px 18px 20px; }
+  .nav-dropdown-menu { width: min(320px, calc(100vw - 48px)); }
 }

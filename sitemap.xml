@@ -11,6 +11,46 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-verse-vis.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-gerookte-vis-garnalen-salades.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-gebakken-vis.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-broodjes-vis.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-haring.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-kant-en-klare-maaltijden.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-luxe-visschotels.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/aanbod-overige-producten.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://svanwijksolutions.github.io/vanoostenvoorvis/geschiedenis.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

@@ -405,37 +405,59 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 @keyframes gradient-shift { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 @media (prefers-reduced-motion: reduce) { .gradient-text { animation: none; } }
 
-.hero-visual { position: relative; }
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+}
+@media (min-width: 768px) { .hero-visual { min-height: 360px; } }
+@media (min-width: 1200px) { .hero-visual { min-height: 420px; } }
+
 .float-shape { position: absolute; border-radius: 50%; filter: blur(2px); opacity: 0.28; pointer-events: none; animation: float-shape 9s ease-in-out infinite alternate; }
 @keyframes float-shape { from { transform: translate(0,0) rotate(0deg);} to { transform: translate(10px,-16px) rotate(8deg);} }
 @media (prefers-reduced-motion: reduce) { .float-shape { animation: none; } }
 
-/* Rotated frame line behind the hero photo — an intentional, hand-placed accent
-   instead of a centered gradient blob */
-.hero-frame-accent {
-  position: absolute;
-  inset: -16px;
-  border: 1px solid var(--color-amber);
-  border-radius: var(--radius-lg);
-  opacity: 0.55;
-  transform: rotate(2deg);
-  pointer-events: none;
-  z-index: 1;
+/* Feedbackronde Sem 27-07-2026: de losse, vaste winkel-/balie-foto in de
+   hero-visual is verwijderd (die foto stond al dubbel: hij wisselt al mee in
+   de cross-fading hero-achtergrond hierboven). De "103 jaar
+   familietraditie"-stempel blijft gewoon rechts in de hero staan, nu
+   vrijstaand tegen die wisselende achtergrond in plaats van bovenop een
+   foto-hoek. .heritage-badge-stage is de nieuwe "rustplek" eronder: een eigen,
+   licht doorschijnend en vervaagd (backdrop-filter) rond kussen, los van de
+   al opake stempelschijf zelf (.heritage-badge-disc hieronder), zodat de
+   stempel evengoed leesbaar blijft tegen zowel de lichtere buitenfoto als de
+   donkerdere winkelfoto. */
+.heritage-badge-stage {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.14), rgba(9, 39, 50, 0.42) 62%, rgba(9, 39, 50, 0.55) 100%);
+  box-shadow: 0 22px 50px rgba(9, 39, 50, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+@media (min-width: 768px) { .heritage-badge-stage { width: 280px; height: 280px; } }
+@media (min-width: 1200px) { .heritage-badge-stage { width: 300px; height: 300px; } }
 
-.hero-photo-card { position: relative; width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); z-index: 2; }
-.hero-photo-card img { width: 100%; height: 100%; object-fit: cover; }
-.hero-photo-card::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4); pointer-events: none; }
-
-/* Ronde, langzaam ronddraaiende "sinds"-stempel op de winkelfoto, vervangt het
-   eerdere losse "103 jaar familietraditie"-tekstblok. Dit is een decoratief
-   badge-element op een foto, geen zwevende actieknop, en valt dus niet onder het
-   verbod op zwevende ronde "+"-knoppen in RULES.md "Zwevende UI-elementen". De tekst
-   loopt rond op een curve (SVG textPath), dus blijft leesbaar ongeacht de
-   rotatiestand. */
+/* Ronde, langzaam ronddraaiende "sinds"-stempel, vervangt het eerdere losse
+   "103 jaar familietraditie"-tekstblok. Dit is een decoratief badge-element,
+   geen zwevende actieknop, en valt dus niet onder het verbod op zwevende
+   ronde "+"-knoppen in RULES.md "Zwevende UI-elementen". De tekst loopt rond
+   op een curve (SVG textPath), dus blijft leesbaar ongeacht de rotatiestand.
+   De stempelschijf zelf (.heritage-badge-disc) is al een volledig opake
+   navy cirkel met eigen drop-shadow, dus onafhankelijk leesbaar van wat
+   erachter staat; .heritage-badge-stage hierboven voegt daar nog een zachte
+   glazen halo aan toe voor extra scheiding met de achtergrond. */
 .heritage-badge {
-  position: absolute; bottom: 20px; right: 20px; z-index: 3;
-  width: 136px; height: 136px;
+  position: relative; z-index: 3;
+  width: 150px; height: 150px;
   filter: drop-shadow(0 10px 24px rgba(9, 39, 50, 0.4));
 }
 .heritage-badge-spin {
@@ -456,7 +478,8 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 }
 .heritage-badge-icon { color: var(--color-amber); }
 @media (prefers-reduced-motion: reduce) { .heritage-badge-spin { animation: none; } }
-@media (min-width: 768px) { .heritage-badge { width: 190px; height: 190px; bottom: 30px; right: 30px; } }
+@media (min-width: 768px) { .heritage-badge { width: 210px; height: 210px; } }
+@media (min-width: 1200px) { .heritage-badge { width: 230px; height: 230px; } }
 
 /* Extra decoratief accent bij de stempel-badge (feedback Sem: "een beker
    erbij ofzo, iets dat bij familietraditie past"): een kleine wisselbeker

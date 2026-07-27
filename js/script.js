@@ -11,7 +11,6 @@ function init() {
   initCounters();
   initIconDraw();
   initScrollMotion();
-  initHeroParallax();
   initCookieNotice();
 }
 
@@ -95,21 +94,6 @@ function initScrollMotion() {
   setTimeout(() => {
     document.querySelectorAll('.scroll-in:not(.in-view), .icon-draw-slow:not(.in-view)').forEach((item) => item.classList.add('in-view'));
   }, 4000);
-}
-
-function initHeroParallax() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const img = document.querySelector('.hero-photo-card img');
-  if (!img) return;
-
-  const onScroll = () => {
-    const rect = img.parentElement.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-    const offset = rect.top * 0.08;
-    img.style.transform = `translateY(${offset}px) scale(1.08)`;
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 function loadComponent(id, url, callback) {

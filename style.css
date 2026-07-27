@@ -159,9 +159,6 @@ p { margin: 0 0 1em; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; max-width: var(--container-width); margin: 0 auto; }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand img { height: 66px; width: auto; }
-.brand-text { display: flex; flex-direction: column; }
-.brand-text strong { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--color-navy); line-height: 1.15; }
-.brand-text span { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-cyan-deep); font-weight: 700; margin-top: 2px; }
 .nav-links { display: none; align-items: center; gap: 36px; }
 .nav-links a { font-size: 0.86rem; font-weight: 600; color: var(--color-navy); position: relative; padding: 6px 0; }
 .nav-links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--color-cyan); transform: scaleX(0); transition: var(--transition); }
@@ -249,27 +246,68 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 .hero-photo-card { position: relative; width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); z-index: 2; }
 .hero-photo-card img { width: 100%; height: 100%; object-fit: cover; }
 .hero-photo-card::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4); pointer-events: none; }
-.hero-stat-badge {
-  position: absolute; bottom: 18px; left: 18px; z-index: 3;
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  border-radius: var(--radius-md); padding: 14px 22px 14px 20px; box-shadow: var(--shadow-card);
-  border-left: 3px solid var(--color-amber);
-  display: flex; flex-direction: column; gap: 1px; line-height: 1;
+
+/* Ronde, langzaam ronddraaiende "sinds"-stempel op de winkelfoto, vervangt het
+   eerdere losse "103 jaar familietraditie"-tekstblok. Dit is een decoratief
+   badge-element op een foto, geen zwevende actieknop, en valt dus niet onder het
+   verbod op zwevende ronde "+"-knoppen in RULES.md "Zwevende UI-elementen". De tekst
+   loopt rond op een curve (SVG textPath), dus blijft leesbaar ongeacht de
+   rotatiestand. */
+.heritage-badge {
+  position: absolute; bottom: 20px; right: 20px; z-index: 3;
+  width: 116px; height: 116px;
+  filter: drop-shadow(0 10px 24px rgba(9, 39, 50, 0.4));
 }
-.hero-stat-number { font-family: var(--font-display); font-weight: 700; font-size: 2.15rem; color: var(--color-navy); }
-.hero-stat-label { font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-cyan-deep); font-weight: 700; margin-top: 3px; }
+.heritage-badge-spin {
+  display: block; width: 100%; height: 100%;
+  transform-origin: 50% 50%;
+  animation: heritage-spin 28s linear infinite;
+}
+@keyframes heritage-spin { to { transform: rotate(360deg); } }
+.heritage-badge-disc { fill: var(--color-navy); }
+.heritage-badge-ring { fill: none; stroke: rgba(255, 255, 255, 0.32); stroke-width: 1; }
+.heritage-badge-text {
+  fill: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.heritage-badge-icon { color: var(--color-amber); }
+@media (prefers-reduced-motion: reduce) { .heritage-badge-spin { animation: none; } }
+@media (min-width: 768px) { .heritage-badge { width: 148px; height: 148px; bottom: 26px; right: 26px; } }
 
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; } }
 
 /* USP strip — editorial index list, not a repeated icon-card grid */
 .usp-strip { padding: 44px 0 8px; }
 .usp-grid { display: block; border-top: 1px solid rgba(14, 58, 76, 0.12); }
-.usp-item { display: grid; grid-template-columns: 52px 1fr; align-items: baseline; gap: 18px; padding: 26px 0; border-bottom: 1px solid rgba(14, 58, 76, 0.12); }
+.usp-item { display: grid; grid-template-columns: 64px 1fr; align-items: baseline; gap: 18px; padding: 26px 0; border-bottom: 1px solid rgba(14, 58, 76, 0.12); }
 .usp-icon { flex-shrink: 0; width: auto; height: auto; border-radius: 0; background: none; align-self: start; padding-top: 0.15em; }
-.usp-icon svg { width: 26px; height: 26px; color: var(--color-cyan-deep); }
+.usp-icon svg { width: 40px; height: 40px; color: var(--color-cyan-deep); }
 .usp-item h2 { margin-bottom: 0.25em; font-size: 1.15rem; }
 .usp-item p { color: var(--color-text-soft); font-size: 0.94rem; margin: 0; max-width: 46ch; }
-@media (min-width: 768px) { .usp-item { grid-template-columns: 70px 1fr; align-items: center; } }
+@media (min-width: 768px) {
+  .usp-item { grid-template-columns: 88px 1fr; align-items: center; }
+  .usp-icon svg { width: 48px; height: 48px; }
+}
+
+/* Zelftekenende USP-iconen: groter dan de gewone iconen elders, en "tekenen"
+   zichzelf in 6 seconden zodra ze in beeld komen (RULES.md "Bewegende elementen":
+   toegestaan bij scroll-in-beeld of load, met prefers-reduced-motion-fallback).
+   Standaard (geen JS, geen IntersectionObserver, of reduced motion) staat de lijn
+   gewoon meteen volledig getekend: de "ongetekende" tussenstaat geldt alléén onder
+   .js-motion, dezelfde veilige gate als de bestaande .scroll-in-reveal, zodat de
+   iconen nooit permanent onzichtbaar kunnen blijven. */
+.icon-draw-slow path, .icon-draw-slow circle, .icon-draw-slow rect { stroke-dasharray: 140; stroke-dashoffset: 0; }
+.js-motion .icon-draw-slow path, .js-motion .icon-draw-slow circle, .js-motion .icon-draw-slow rect { stroke-dashoffset: 140; }
+.js-motion .icon-draw-slow.in-view path, .js-motion .icon-draw-slow.in-view circle, .js-motion .icon-draw-slow.in-view rect {
+  /* Bewust een gelijkmatige ease-in-out i.p.v. de snelle ease-out-curve elders op de
+     site: dit moet 6 volle seconden zichtbaar "getekend" worden, geen animatie die
+     al na 2 seconden vrijwel klaar oogt. */
+  animation: icon-draw 6s ease-in-out both;
+}
 
 /* Story / heritage teaser */
 .story { display: grid; gap: 40px; align-items: center; }
@@ -397,8 +435,6 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 /* Footer */
 .site-footer { background: var(--color-navy-deep); color: rgba(238, 246, 248, 0.88); padding: 68px 0 26px; }
 .footer-grid { display: grid; gap: 40px; grid-template-columns: 1fr; margin-bottom: 44px; }
-.footer-brand .brand-text strong { color: var(--color-white); font-size: 1.2rem; }
-.footer-brand .brand-text span { color: var(--color-cyan); }
 .footer-brand img { filter: brightness(0) invert(1); height: 72px; }
 .footer-tagline { color: rgba(238, 246, 248, 0.6); font-size: 0.92rem; max-width: 300px; margin-top: 14px; }
 .footer-col .footer-heading { font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-cyan); margin: 0 0 1.1em; }

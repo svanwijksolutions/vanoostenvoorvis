@@ -44,7 +44,21 @@ function initScrollMotion() {
 
   document.body.classList.add('js-motion');
 
-  const items = document.querySelectorAll('.scroll-in');
+  // Zelftekenende USP-iconen: stroke-dasharray/dashoffset exact instellen op de
+  // werkelijke padlengte van elk lijnstukje (i.p.v. één vaste schatting), zodat de
+  // 6-seconden-animatie evenredig over de hele lijn loopt, ook bij korte en lange
+  // stukjes lijn binnen hetzelfde icoon.
+  document.querySelectorAll('.icon-draw-slow path, .icon-draw-slow circle, .icon-draw-slow rect').forEach((el) => {
+    if (typeof el.getTotalLength !== 'function') return;
+    const length = el.getTotalLength();
+    el.style.strokeDasharray = String(length);
+    el.style.strokeDashoffset = String(length);
+  });
+
+  // .scroll-in = bestaande fade/translate-reveal voor kaarten/blokken.
+  // .icon-draw-slow = zelftekenende USP-iconen (RULES.md "Bewegende elementen"),
+  // beide gebruiken dezelfde veilige observer + vangnet-timeout hieronder.
+  const items = document.querySelectorAll('.scroll-in, .icon-draw-slow');
   if (!items.length) return;
 
   const observer = new IntersectionObserver(
@@ -63,7 +77,7 @@ function initScrollMotion() {
 
   // Vangnet: forceer zichtbaarheid als de observer om wat voor reden dan ook iets mist.
   setTimeout(() => {
-    document.querySelectorAll('.scroll-in:not(.in-view)').forEach((item) => item.classList.add('in-view'));
+    document.querySelectorAll('.scroll-in:not(.in-view), .icon-draw-slow:not(.in-view)').forEach((item) => item.classList.add('in-view'));
   }, 4000);
 }
 

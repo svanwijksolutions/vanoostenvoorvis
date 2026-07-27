@@ -67,9 +67,19 @@
         <div class="hero-photo-card">
           <img src="assets/images/winkel-interieur.webp" alt="Interieur van de winkel van Van Oosten voor Vis aan de Buitenwatersloot in Delft" width="1600" height="803" loading="eager">
         </div>
-        <div class="hero-stat-badge">
-          <span class="hero-stat-number"><span data-counter="103">0</span></span>
-          <span class="hero-stat-label">jaar familietraditie</span>
+        <div class="heritage-badge" role="img" aria-label="Stempel: 103 jaar familietraditie, Van Oosten voor Vis sinds 1923">
+          <svg class="heritage-badge-spin" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <defs>
+              <path id="heritage-badge-path" d="M 100,100 m -66,0 a 66,66 0 1,1 132,0 a 66,66 0 1,1 -132,0"/>
+            </defs>
+            <circle class="heritage-badge-disc" cx="100" cy="100" r="96"/>
+            <circle class="heritage-badge-ring" cx="100" cy="100" r="86"/>
+            <circle class="heritage-badge-ring" cx="100" cy="100" r="50"/>
+            <text class="heritage-badge-text">
+              <textPath href="#heritage-badge-path" startOffset="0">103 jaar familietraditie &#8226; 103 jaar familietraditie &#8226; </textPath>
+            </text>
+            <use href="assets/icons/sprite.svg#icon-anchor" class="heritage-badge-icon" x="78" y="78" width="44" height="44"></use>
+          </svg>
         </div>
       </div>
     </div>
@@ -78,21 +88,44 @@
   <section class="usp-strip">
     <div class="container usp-grid reveal">
       <div class="usp-item">
-        <div class="usp-icon"><svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-route"></use></svg></div>
+        <div class="usp-icon">
+          <svg class="icon-draw-slow" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M14 24 A10 10 0 0 1 34 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M24 10 V6 M15.5 13.5 L12.7 10.7 M32.5 13.5 L35.3 10.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M4 24 H44" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M13 30 L16 38 H32 L35 30 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M24 30 V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M8 43 C11 41 13 41 16 43 C19 45 21 45 24 43 C27 41 29 41 32 43 C35 45 37 45 40 43" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div>
           <h2>Dagvers uit Scheveningen</h2>
           <p>Iedere ochtend vroeg halen wij onze vis rechtstreeks op, voor de hoogst mogelijke versheid.</p>
         </div>
       </div>
       <div class="usp-item">
-        <div class="usp-icon"><svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-knife"></use></svg></div>
+        <div class="usp-icon">
+          <svg class="icon-draw-slow" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="7" y="30" width="34" height="7" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 30 L29 13 C32.5 9.5 38 9.5 40.5 12 C43 14.5 43 20 39.5 23.5 L23 30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M16 33.5 H21 M25 33.5 H30" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div>
           <h2>Eigen visverwerking</h2>
           <p>Wij maken alle vis zelf schoon in de winkel, dezelfde ochtend nog.</p>
         </div>
       </div>
       <div class="usp-item">
-        <div class="usp-icon"><svg class="icon-draw" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-anchor"></use></svg></div>
+        <div class="usp-icon">
+          <svg class="icon-draw-slow" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M20 8 C20 5.2 21.8 3 24 3 C26.2 3 28 5.2 28 8 C28 10.5 26.2 12 24 12 C21.8 12 20 10.5 20 8 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M24 12 V39" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M15 19 H33" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M9 27 C9 34 15.5 40 24 41 C32.5 40 39 34 39 27" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 27 C9 24.5 10.8 23 13 24 M39 27 C39 24.5 37.2 23 35 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div>
           <h2>Familietraditie sinds 1923</h2>
           <p>De naam Van Oosten staat al generaties lang garant voor verse Noordzeevis in Delft.</p>

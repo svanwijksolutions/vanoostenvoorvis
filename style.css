@@ -178,9 +178,34 @@ p { margin: 0 0 1em; }
   transform: translateX(100%);
   visibility: hidden; opacity: 0;
   transition: transform 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  display: flex; flex-direction: column; align-items: center;
+  /* Bugfix Sem 27-07-2026 ("het menu doet gek als ik naar beneden scroll"):
+     met "Aanbod" opengeklapt is de menu-inhoud (8 categorieën + overige
+     links) hoger dan de viewport op kleinere telefoons. Met de oude
+     justify-content: center en zonder eigen scroll kon je dat overschot
+     helemaal niet bereiken: het werd zowel boven- als onderaan afgesneden
+     en er gebeurde niets bij scrollen, terwijl de onderliggende pagina door
+     body.menu-open (hieronder) toch al vergrendeld is. .mobile-menu scrollt
+     nu gewoon zelf; overscroll-behavior voorkomt dat een scrollbeweging aan
+     het eind toch doorlekt naar de pagina eronder. */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 90px 24px 32px;
+  box-sizing: border-box;
 }
 .mobile-menu.open { transform: translateX(0); visibility: visible; opacity: 1; }
+/* .mobile-menu-inner i.p.v. justify-content: center op .mobile-menu zelf: de
+   auto-margins centreren de linkjes verticaal zolang ze in de viewport
+   passen (het normale geval), maar vallen vanzelf weg zodra de inhoud
+   (bijv. met "Aanbod" open) hoger wordt dan de viewport, zodat alles via de
+   overflow-y hierboven gewoon bereikbaar blijft in plaats van onbereikbaar
+   afgesneden te worden. */
+.mobile-menu-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  width: 100%;
+  margin: auto 0;
+}
 /* :not(.btn) hier is bewust structureel: zonder deze uitsluiting overschrijft
    deze regel (specificiteit .mobile-menu + element a) de opmaak van .btn
    (specificiteit van alleen de klasse), waardoor "Bel de winkel" hieronder
@@ -257,7 +282,9 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
   box-sizing: border-box;
   border-radius: var(--radius-sm);
   font-size: 0.86rem;
-  font-weight: 600;
+  /* Feedback Sem 27-07-2026: de uitgeklapte subcategorieën hoeven niet vet,
+     alleen het hoofditem "Aanbod" zelf (.nav-links a) blijft font-weight 600. */
+  font-weight: 400;
   color: var(--color-navy);
 }
 .nav-dropdown-menu a::after { content: none; }
@@ -289,15 +316,24 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 .mobile-accordion-wrap > .mobile-accordion-list { overflow: hidden; min-height: 0; }
 .mobile-nav-item.accordion-open .mobile-accordion-wrap { grid-template-rows: 1fr; }
 .mobile-accordion-list { margin: 0; padding: 0; text-align: center; }
-.mobile-accordion-list a {
+/* Specificiteit: ".mobile-menu a:not(.btn)" hierboven (0,2,1: .mobile-menu +
+   :not(.btn) telt als klasse + element) overschreef deze regel eerder
+   volledig zodra hij alleen ".mobile-accordion-list a" (0,1,1) was, ondanks
+   latere bronvolgorde: de subcategorieën stonden daardoor onbedoeld nog
+   steeds op de grote, vette .mobile-menu-opmaak (font-weight 700, Fraunces).
+   Met ".mobile-menu .mobile-accordion-list a" (ook 0,2,1) wint deze regel
+   alsnog, via bronvolgorde bij gelijke specificiteit (feedback Sem
+   27-07-2026: subcategorieën hoeven niet vet, alleen het hoofditem "Aanbod"
+   blijft dat via .mobile-menu a:not(.btn)). */
+.mobile-menu .mobile-accordion-list a {
   display: block;
   font-family: var(--font-body);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   padding: 9px 0;
   color: var(--color-text-soft);
 }
-.mobile-accordion-list a:hover { color: var(--color-cyan-deep); }
+.mobile-menu .mobile-accordion-list a:hover { color: var(--color-cyan-deep); }
 @media (prefers-reduced-motion: reduce) {
   .mobile-accordion-wrap, .mobile-accordion-caret { transition: none; }
 }
@@ -449,8 +485,8 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
    vrijstaand tegen die wisselende achtergrond in plaats van bovenop een
    foto-hoek. .heritage-badge-stage is de nieuwe "rustplek" eronder: een eigen,
    licht doorschijnend en vervaagd (backdrop-filter) rond kussen, los van de
-   al opake stempelschijf zelf (.heritage-badge-disc hieronder), zodat de
-   stempel evengoed leesbaar blijft tegen zowel de lichtere buitenfoto als de
+   al opake stempel zelf (.heritage-badge hieronder), zodat de stempel
+   evengoed leesbaar blijft tegen zowel de lichtere buitenfoto als de
    donkerdere winkelfoto. */
 .heritage-badge-stage {
   position: relative;
@@ -469,40 +505,55 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 @media (min-width: 768px) { .heritage-badge-stage { width: 280px; height: 280px; } }
 @media (min-width: 1200px) { .heritage-badge-stage { width: 300px; height: 300px; } }
 
-/* Ronde, langzaam ronddraaiende "sinds"-stempel, vervangt het eerdere losse
-   "103 jaar familietraditie"-tekstblok. Dit is een decoratief badge-element,
+/* Ronde "sinds"-stempel met platte, leesbare tekst (feedback Sem 27-07-2026:
+   de eerdere ronddraaiende SVG-textPath-versie van "103 jaar familietraditie"
+   moest weg, "hoeft niet te draaien"). Dit is een decoratief badge-element,
    geen zwevende actieknop, en valt dus niet onder het verbod op zwevende
-   ronde "+"-knoppen in RULES.md "Zwevende UI-elementen". De tekst loopt rond
-   op een curve (SVG textPath), dus blijft leesbaar ongeacht de rotatiestand.
-   De stempelschijf zelf (.heritage-badge-disc) is al een volledig opake
-   navy cirkel met eigen drop-shadow, dus onafhankelijk leesbaar van wat
-   erachter staat; .heritage-badge-stage hierboven voegt daar nog een zachte
-   glazen halo aan toe voor extra scheiding met de achtergrond. */
+   ronde "+"-knoppen in RULES.md "Zwevende UI-elementen". De opake navy
+   cirkel blijft onafhankelijk leesbaar van wat erachter staat;
+   .heritage-badge-stage hierboven voegt daar nog een zachte glazen halo aan
+   toe voor extra scheiding met de wisselende achtergrondfoto. De beweging
+   zit nu in de cijfers zelf: "103" telt bij het laden op vanaf 0 (RULES.md
+   "Bewegende elementen" noemt dit expliciet als toegestaan patroon voor een
+   feit dat al vaststaat), zie initCounters() in js/script.js. De omringende
+   .hero-visual heeft daarnaast al de bestaande .reveal fade-up-animatie. */
 .heritage-badge {
   position: relative; z-index: 3;
   width: 150px; height: 150px;
-  filter: drop-shadow(0 10px 24px rgba(9, 39, 50, 0.4));
+  border-radius: 50%;
+  background: var(--color-navy);
+  box-shadow: 0 10px 24px rgba(9, 39, 50, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  padding: 10px;
+  text-align: center;
 }
-.heritage-badge-spin {
-  display: block; width: 100%; height: 100%;
-  transform-origin: 50% 50%;
-  animation: heritage-spin 28s linear infinite;
-}
-@keyframes heritage-spin { to { transform: rotate(360deg); } }
-.heritage-badge-disc { fill: var(--color-navy); }
-.heritage-badge-ring { fill: none; stroke: rgba(255, 255, 255, 0.32); stroke-width: 1; }
-.heritage-badge-text {
-  fill: var(--color-white);
-  font-family: var(--font-body);
+.heritage-badge-icon { width: 26px; height: 26px; color: var(--color-amber); margin-bottom: 2px; }
+.heritage-badge-number {
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 12.5px;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--color-white);
+}
+.heritage-badge-caption {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 8em;
 }
-.heritage-badge-icon { color: var(--color-amber); }
-@media (prefers-reduced-motion: reduce) { .heritage-badge-spin { animation: none; } }
-@media (min-width: 768px) { .heritage-badge { width: 210px; height: 210px; } }
-@media (min-width: 1200px) { .heritage-badge { width: 230px; height: 230px; } }
+@media (min-width: 768px) {
+  .heritage-badge { width: 210px; height: 210px; }
+  .heritage-badge-icon { width: 32px; height: 32px; }
+  .heritage-badge-number { font-size: 3.3rem; }
+  .heritage-badge-caption { font-size: 0.82rem; }
+}
+@media (min-width: 1200px) {
+  .heritage-badge { width: 230px; height: 230px; }
+  .heritage-badge-number { font-size: 3.6rem; }
+}
 
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; } }
 

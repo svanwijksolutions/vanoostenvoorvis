@@ -112,18 +112,33 @@ function initHeader() {
   const toggle = document.querySelector('.menu-toggle');
   const mobileMenu = document.querySelector('.mobile-menu');
   const menuLinks = document.querySelectorAll('.mobile-menu a');
+  let lockedScrollY = 0;
 
+  // Bugfix Sem 27-07-2026 ("het menu doet gek als ik naar beneden scroll"):
+  // body.menu-open { overflow: hidden } alleen is op mobiel (vooral iOS
+  // Safari) niet altijd genoeg om te voorkomen dat de pagina onder het
+  // geopende menu meeschuift. Body op position: fixed zetten tijdens het
+  // openstaan van het menu is de standaard, betrouwbare oplossing: de
+  // scrollpositie wordt hier bewaard en bij het sluiten weer exact
+  // teruggezet, zodat de bezoeker niet naar de bovenkant van de pagina
+  // springt.
   function openMenu() {
+    lockedScrollY = window.scrollY;
     mobileMenu.classList.add('open');
     document.body.classList.add('menu-open');
-    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + lockedScrollY + 'px';
+    document.body.style.width = '100%';
     toggle.setAttribute('aria-expanded', 'true');
   }
 
   function closeMenu() {
     mobileMenu.classList.remove('open');
     document.body.classList.remove('menu-open');
-    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, lockedScrollY);
     toggle.setAttribute('aria-expanded', 'false');
   }
 

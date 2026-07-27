@@ -36,32 +36,34 @@
   </div>
 
   <nav id="mobile-menu" class="mobile-menu" aria-label="Mobiel menu">
-    <a href="index.html" data-nav="index">Home</a>
-    <div class="mobile-nav-item">
-      <div class="mobile-nav-row">
-        <a href="aanbod.html" data-nav="aanbod">Aanbod</a>
-        <button type="button" class="mobile-accordion-toggle" aria-expanded="false" aria-controls="mobile-aanbod-list">
-          <span class="sr-only">Categorieën tonen</span>
-          <svg class="mobile-accordion-caret" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M6 9 L12 15 L18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
+    <div class="mobile-menu-inner">
+      <a href="index.html" data-nav="index">Home</a>
+      <div class="mobile-nav-item">
+        <div class="mobile-nav-row">
+          <a href="aanbod.html" data-nav="aanbod">Aanbod</a>
+          <button type="button" class="mobile-accordion-toggle" aria-expanded="false" aria-controls="mobile-aanbod-list">
+            <span class="sr-only">Categorieën tonen</span>
+            <svg class="mobile-accordion-caret" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M6 9 L12 15 L18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="mobile-accordion-wrap">
+          <ul id="mobile-aanbod-list" class="mobile-accordion-list">
+            <li><a href="aanbod-verse-vis.html">Verse vis</a></li>
+            <li><a href="aanbod-gerookte-vis-garnalen-salades.html">Gerookte vis, garnalen en salades</a></li>
+            <li><a href="aanbod-gebakken-vis.html">Gebakken vis</a></li>
+            <li><a href="aanbod-broodjes-vis.html">Broodjes vis</a></li>
+            <li><a href="aanbod-haring.html">Haring</a></li>
+            <li><a href="aanbod-kant-en-klare-maaltijden.html">Kant en klare maaltijden</a></li>
+            <li><a href="aanbod-luxe-visschotels.html">Luxe visschotels</a></li>
+            <li><a href="aanbod-overige-producten.html">Overige producten</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="mobile-accordion-wrap">
-        <ul id="mobile-aanbod-list" class="mobile-accordion-list">
-          <li><a href="aanbod-verse-vis.html">Verse vis</a></li>
-          <li><a href="aanbod-gerookte-vis-garnalen-salades.html">Gerookte vis, garnalen en salades</a></li>
-          <li><a href="aanbod-gebakken-vis.html">Gebakken vis</a></li>
-          <li><a href="aanbod-broodjes-vis.html">Broodjes vis</a></li>
-          <li><a href="aanbod-haring.html">Haring</a></li>
-          <li><a href="aanbod-kant-en-klare-maaltijden.html">Kant en klare maaltijden</a></li>
-          <li><a href="aanbod-luxe-visschotels.html">Luxe visschotels</a></li>
-          <li><a href="aanbod-overige-producten.html">Overige producten</a></li>
-        </ul>
-      </div>
+      <a href="geschiedenis.html" data-nav="geschiedenis">Geschiedenis</a>
+      <a href="contact.html" data-nav="contact">Contact</a>
+      <a href="tel:0152120610" class="btn btn-primary">Bel de winkel</a>
     </div>
-    <a href="geschiedenis.html" data-nav="geschiedenis">Geschiedenis</a>
-    <a href="contact.html" data-nav="contact">Contact</a>
-    <a href="tel:0152120610" class="btn btn-primary">Bel de winkel</a>
   </nav>
 </header>
